@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 // Material
 import { makeStyles } from "@material-ui/core/styles";
 
-// debugger
-import Button from "@material-ui/core/Button"
-
 // Components
 import Header from "./components/Header";
 import Content from "./components/Content"
@@ -18,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: "100vh",
     display: "grid",
-    gridTemplateRows: "65px 1fr 65px",
+    gridTemplateRows: "65px 1fr auto",
   },
 }));
 

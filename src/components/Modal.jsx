@@ -52,12 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SimpleModal({
-  numbersPlayed,
-  setPlayedNumbers,
-  setBalance,
-  balance,
-}) {
+function SimpleModal({ numbersPlayed, setPlayedNumbers, setBalance, balance }) {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
@@ -99,9 +94,9 @@ function SimpleModal({
       }
 
       // Adding to table stuff
-      const date = new Date( Date.now() );
+      const date = new Date(Date.now());
       let localeSpecificTime = date.toLocaleTimeString();
-      localeSpecificTime.replace(/:\d+ /, ' ');
+      localeSpecificTime.replace(/:\d+ /, " ");
 
       setPlayedNumbers(function previousNumber(previousPlayedNumbersInfo) {
         return [
@@ -121,8 +116,9 @@ function SimpleModal({
   };
 
   const handleDebug = () => {
+    // Game Stuff
     const newNumbers = [7, 7, 7];
-
+  
     setBalance(function playFee(previousBalance) {
       return previousBalance - 1;
     });
@@ -145,6 +141,24 @@ function SimpleModal({
         return previousBalance + 0.5;
       });
     }
+
+    // Adding to table stuff
+    const date = new Date(Date.now());
+    let localeSpecificTime = date.toLocaleTimeString();
+    localeSpecificTime.replace(/:\d+ /, " ");
+
+    setPlayedNumbers(function previousNumber(previousPlayedNumbersInfo) {
+      return [
+        ...previousPlayedNumbersInfo,
+        {
+          id: previousPlayedNumbersInfo.length + 1,
+          slotOne: newNumbers[0],
+          slotTwo: newNumbers[1],
+          slotThree: newNumbers[2],
+          time: localeSpecificTime,
+        },
+      ];
+    });
 
     setNumbers(newNumbers);
   };
