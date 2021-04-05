@@ -3,9 +3,15 @@ import { useState, useEffect } from "react";
 // Material
 import { makeStyles } from "@material-ui/core/styles";
 
+// debugger
+import Button from "@material-ui/core/Button"
+
 // Components
 import Header from "./components/Header";
+import Content from "./components/Content"
 import Footer from "./components/Footer";
+
+import SimpleModal from "./components/Modal";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -19,13 +25,14 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   // States
   const [balance, setBalance] = useState(100);
-  const [isLogin, setIsLogin] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
   const [username, setUsername] = useState("");
+  const [playedNumbers, setPlayedNumbers] = useState([])
 
   // Effects
   useEffect(() => {
     const moneyBalance = parseInt(localStorage.getItem("moneyBalance"));
-    const userLoggedIn = Boolean(localStorage.getItem("isLogin"));
+    const userLoggedIn = localStorage.getItem("isLogin");
     const userName = localStorage.getItem("username");
 
     if (!moneyBalance) {
@@ -34,12 +41,12 @@ function App() {
       setBalance(moneyBalance);
     }
 
-    if (userLoggedIn === "false" || userLoggedIn === false || userName === "") {
-      setIsLogin(false);
-      setUsername("");
-    } else if (userLoggedIn === "true" || userLoggedIn === true) {
+    if (userLoggedIn === "T") {
       setIsLogin(true);
       setUsername(userName);
+    } else {
+      setIsLogin(false);
+      setUsername("");
     }
   }, []);
 
@@ -48,12 +55,14 @@ function App() {
   }, [balance]);
 
   useEffect(() => {
-    localStorage.setItem("isLogin", isLogin);
-  }, [isLogin]);
+    isLogin ? localStorage.setItem("isLogin", "T") : localStorage.setItem("isLogin", "F");
 
-  useEffect(() => {
-    localStorage.setItem("username", username);
-  }, [username]);
+    if (!isLogin) {
+      localStorage.removeItem("username");
+    } else {
+      localStorage.setItem("username", username);
+    }
+  }, [isLogin]);
 
   const classes = useStyles();
   return (
@@ -65,7 +74,9 @@ function App() {
         username={username}
         setUsername={setUsername}
       />
-      <div></div>
+      <Content numbersPlayed={playedNumbers}>
+        <SimpleModal setPlayedNumbers={setPlayedNumbers} balance={balance} setBalance={setBalance}/>
+      </Content>
       <Footer />
     </div>
   );
